@@ -12,7 +12,7 @@ class NTB(nn.Module):
     """
 
     def __init__(self, in_features: int, out_features: int, spatial_reduction_ratio: int = 1,
-                 shrink_ratio: float = 0.75, mlp_expansion_ratio: int = 1):
+                 shrink_ratio: float = 0.75, mlp_expansion_ratio: int = 2):
         super().__init__()
         emhsa_features = int(in_features * shrink_ratio)
         mhca_features = out_features - emhsa_features

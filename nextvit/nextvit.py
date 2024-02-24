@@ -27,16 +27,17 @@ class NextViT(nn.Module):
         self.blocks = nn.Sequential(
             # stage 1
             PatchEmbedding(in_features=64, out_features=96, pooling=False),
-            NextViTBlock(in_features=96, out_features=96, num_ncb_layers=1, num_ntb_layers=0),
+            NextViTBlock(in_features=96, out_features=96, num_ncb_layers=1, num_ntb_layers=0, sr_ratio=8),
             # stage 2
             PatchEmbedding(in_features=96, out_features=192),
-            NextViTBlock(in_features=192, out_features=256, num_ncb_layers=3, num_ntb_layers=1),
+            NextViTBlock(in_features=192, out_features=256, num_ncb_layers=3, num_ntb_layers=1, sr_ratio=4),
             # stage 3
             PatchEmbedding(in_features=256, out_features=384),
-            NextViTBlock(in_features=384, out_features=512, num_ncb_layers=4, num_ntb_layers=1, depth=vit_type.value),
+            NextViTBlock(in_features=384, out_features=512, num_ncb_layers=4, num_ntb_layers=1, sr_ratio=2,
+                         depth=vit_type.value),
             # stage 4
             PatchEmbedding(in_features=512, out_features=768),
-            NextViTBlock(in_features=768, out_features=1024, num_ncb_layers=2, num_ntb_layers=1),
+            NextViTBlock(in_features=768, out_features=1024, num_ncb_layers=2, num_ntb_layers=1, sr_ratio=1),
         )
 
         self.batch_norm = nn.BatchNorm2d(num_features=out_features)

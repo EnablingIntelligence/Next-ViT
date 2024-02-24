@@ -12,14 +12,14 @@ class NextViTBlock(nn.Module):
     """
 
     def __init__(self, in_features: int, out_features: int, num_ncb_layers: int, num_ntb_layers: int, depth: int = 1,
-                 spatial_reduction_ratio: int = 1):
+                 sr_ratio: int = 1):
         super().__init__()
         self.in_features = in_features
         self.out_features = out_features
         self.num_ncb_layers = num_ncb_layers
         self.num_ntb_layers = num_ntb_layers
         self.depth = depth
-        self.spacial_reduction_ratio = spatial_reduction_ratio
+        self.spacial_reduction_ratio = sr_ratio
 
         self.block = self.__make_block_layers()
 
