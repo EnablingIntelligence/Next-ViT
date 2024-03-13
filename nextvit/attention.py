@@ -29,19 +29,19 @@ class EMHSA(nn.Module):
     https://arxiv.org/pdf/2207.05501.pdf
     """
 
-    def __init__(self, in_features: int, spatial_reduction_ratio: int, head_dim: int = 32, hidden_dim: int = 64):
+    def __init__(self, in_features: int, sr_ratio: int = 2, n_heads: int = 8, hidden_dim: int = 64):
         super().__init__()
         self.in_dim = in_features
-        self.n_heads = in_features // head_dim
+        self.n_heads = n_heads
         self.hidden_dim = hidden_dim
         self.scaling_factor = hidden_dim ** (-0.5)
 
         self.norm = nn.BatchNorm2d(num_features=in_features)
-        self.avg_pool = nn.AvgPool2d(kernel_size=spatial_reduction_ratio, stride=spatial_reduction_ratio)
-        self.q_proj = nn.Linear(in_features=in_features, out_features=hidden_dim)
-        self.k_proj = nn.Linear(in_features=in_features, out_features=hidden_dim)
-        self.v_proj = nn.Linear(in_features=in_features, out_features=hidden_dim)
-        self.out_proj = nn.Linear(in_features=hidden_dim * self.n_heads, out_features=in_features)
+        self.avg_pool = nn.AvgPool2d(kernel_size=sr_ratio, stride=sr_ratio)
+        self.q_proj = nn.Linear(in_features=in_features, out_features=hidden_dim * n_heads)
+        self.k_proj = nn.Linear(in_features=in_features, out_features=hidden_dim * n_heads)
+        self.v_proj = nn.Linear(in_features=in_features, out_features=hidden_dim * n_heads)
+        self.out_proj = nn.Linear(in_features=hidden_dim * n_heads, out_features=in_features)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         b, c, h, w = x.shape

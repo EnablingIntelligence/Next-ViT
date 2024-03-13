@@ -4,7 +4,7 @@ from nextvit import NextViT, NextViTType
 
 if __name__ == "__main__":
     inputs = torch.rand(1, 3, 224, 224)
-    print("Start training the model")
+    print(f"Mock input shape: {inputs.shape}")
 
     for vit_type in NextViTType:
         model = NextViT(in_features=3, out_features=1024, num_classes=10, vit_type=vit_type)

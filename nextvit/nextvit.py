@@ -22,7 +22,7 @@ class NextViT(nn.Module):
 
     def __init__(self, in_features: int, out_features: int, num_classes: int, vit_type: NextViTType = NextViTType.BASE):
         super().__init__()
-        self.stem = Stem(in_features)
+        self.stem = Stem(in_features=in_features, out_features=64)
 
         self.blocks = nn.Sequential(
             # stage 1
@@ -42,10 +42,11 @@ class NextViT(nn.Module):
 
         self.batch_norm = nn.BatchNorm2d(num_features=out_features)
         self.avg_pool = nn.AdaptiveAvgPool2d((1, 1))
-        self.out_proj = nn.Linear(1, num_classes)
+        self.out_proj = nn.Linear(1024, num_classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         stem_out = self.stem(x)
         blocks_out = self.blocks(stem_out)
-        pool_out = self.avg_pool(blocks_out)
+        norm_out = self.batch_norm(blocks_out)
+        pool_out = self.avg_pool(norm_out)
         return self.out_proj(torch.flatten(pool_out, 1))
