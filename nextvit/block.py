@@ -12,12 +12,13 @@ class NextViTBlock(nn.Module):
     """
 
     def __init__(self, in_features: int, out_features: int, num_ncb_layers: int, num_ntb_layers: int, depth: int = 1,
-                 sr_ratio: int = 1):
+                 sr_ratio: int = 1, dropout_path: float = 0.):
         super().__init__()
         self.in_features = in_features
         self.out_features = out_features
         self.num_ncb_layers = num_ncb_layers
         self.num_ntb_layers = num_ntb_layers
+        self.dropout_path = dropout_path
         self.sr_ratio = sr_ratio
         self.depth = depth
 
@@ -36,8 +37,8 @@ class NextViTBlock(nn.Module):
     def __make_layer(self, out_features: int) -> nn.Sequential:
         return nn.Sequential(
             *[
-                *[NCB(self.in_features, self.in_features) for _ in range(self.num_ncb_layers)],
-                *[NTB(self.in_features, out_features, self.sr_ratio) for _ in range(self.num_ntb_layers)]
+                *[NCB(self.in_features, self.in_features, self.dropout_path) for _ in range(self.num_ncb_layers)],
+                *[NTB(self.in_features, out_features, self.sr_ratio, self.dropout_path) for _ in range(self.num_ntb_layers)]
             ]
         )
 
