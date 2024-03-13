@@ -50,3 +50,9 @@ class NextViT(nn.Module):
         norm_out = self.batch_norm(blocks_out)
         pool_out = self.avg_pool(norm_out)
         return self.out_proj(torch.flatten(pool_out, 1))
+
+    def save(self, path: str):
+        torch.save(self.state_dict(), path)
+
+    def load(self, path: str):
+        self.load_state_dict(torch.load(path))
