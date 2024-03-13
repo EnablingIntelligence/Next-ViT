@@ -11,10 +11,10 @@ class NTB(nn.Module):
     https://arxiv.org/pdf/2207.05501.pdf
     """
 
-    def __init__(self, in_features: int, out_features: int, shrink_ratio: float = 0.75,
-                 spatial_reduction_ratio: int = 1, mlp_expansion_ratio: int = 1):
+    def __init__(self, in_features: int, out_features: int, spatial_reduction_ratio: int = 1,
+                 shrink_ratio: float = 0.75, mlp_expansion_ratio: int = 2):
         super().__init__()
-        emhsa_features = int(in_features * shrink_ratio)
+        emhsa_features = int(out_features * shrink_ratio)
         mhca_features = out_features - emhsa_features
 
         self.conv1 = nn.Conv2d(in_channels=in_features, out_channels=emhsa_features, kernel_size=1)

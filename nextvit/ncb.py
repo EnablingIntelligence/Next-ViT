@@ -11,7 +11,7 @@ class NCB(nn.Module):
     https://arxiv.org/pdf/2207.05501.pdf
     """
 
-    def __init__(self, in_features: int, out_features: int, expansion_ratio: int = 1):
+    def __init__(self, in_features: int, out_features: int, expansion_ratio: int = 3):
         super().__init__()
         self.mhca = MHCA(in_features)
         self.mlp = MLP(in_features, out_features, expansion_ratio)
